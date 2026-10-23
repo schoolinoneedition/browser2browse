@@ -23,6 +23,18 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate JavaScript syntax
+        run: |
+          node --check app.js
+          node --check backend/src/server.js
+      - name: Build static frontend artifact
+        run: |
+          mkdir _site
+          cp index.html app.js styles.css config.js favicon.svg manifest.webmanifest _site/
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
@@ -30,7 +42,7 @@ jobs:
       - name: Upload site files
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
