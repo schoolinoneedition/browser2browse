@@ -11,7 +11,7 @@ Open `index.html` in a modern browser, or serve this folder with any static HTTP
 The included `.github/workflows/pages.yml` deploys the repository root to GitHub Pages on each push to `main`.
 
 1. Put the contents of this folder at the root of a GitHub repository.
-2. If GitHub Pages is not enabled automatically, open **Settings → Pages** and select **GitHub Actions** as the source.
+2. Open **Settings → Pages** and select **GitHub Actions** as the source. This one-time setting must be enabled by a repository owner.
 3. Open the **Actions** tab and wait for **Deploy Browse2Browse to GitHub Pages** to complete. The workflow summary shows the published site URL.
 
 All local references are relative, so they work at a GitHub Pages repository subpath.
