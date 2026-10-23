@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f6f8">
+  <meta name="description" content="Browse2Browse — Browse the web inside your browser.">
+  <meta property="og:title" content="Browse2Browse">
+  <meta property="og:description" content="Browse the web inside your browser.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Browse2Browse — Browse the web inside your browser</title>
+</head>
+<body>
+  <main class="browser" id="browser">
+    <header class="chrome">
+      <div class="tab-strip" id="tabStrip" role="tablist" aria-label="Browser tabs"></div>
+      <button class="icon-button add-tab" id="newTab" aria-label="New tab" title="New tab (Ctrl+T)">＋</button>
+      <div class="window-space"></div>
+    </header>
+    <nav class="toolbar" aria-label="Browser controls">
+      <div class="nav-controls">
+        <button class="icon-button" id="back" aria-label="Go back" title="Back">←</button>
+        <button class="icon-button" id="forward" aria-label="Go forward" title="Forward">→</button>
+        <button class="icon-button" id="reload" aria-label="Reload page" title="Reload (Ctrl+R)">↻</button>
+        <button class="icon-button" id="home" aria-label="Go to homepage" title="Home">⌂</button>
+      </div>
+      <form id="addressForm" class="address-form" role="search">
+        <span class="lock" id="schemeMark" aria-hidden="true">⌕</span>
+        <input id="address" type="text" autocomplete="off" spellcheck="false" aria-label="Search or enter website address" placeholder="Search or enter address">
+        <button class="clear-address" id="clearAddress" type="button" aria-label="Clear address" hidden>×</button>
+      </form>
+      <button class="icon-button settings-trigger" id="settingsToggle" aria-label="Open settings" title="Settings">⚙</button>
+      <button class="icon-button fullscreen-trigger" id="fullscreen" aria-label="Enter fullscreen" title="Fullscreen">⛶</button>
+    </nav>
+    <div class="progress-track" aria-hidden="true"><div id="progress"></div></div>
+    <section id="viewport" class="viewport" aria-live="polite">
+      <div id="newtab" class="newtab"></div>
+      <iframe id="pageFrame" title="Embedded website" sandbox="allow-forms allow-scripts allow-popups allow-popups-to-escape-sandbox allow-downloads" allow="fullscreen; clipboard-read; clipboard-write" hidden></iframe>
+      <div id="frameHint" class="frame-hint" hidden role="status"><span><strong>Page blank?</strong> Some sites block embedded browsing.</span><button id="hintCopy" type="button">Copy address</button><a id="hintOpen" target="_blank" rel="noopener noreferrer">Open in browser ↗</a><button id="hintClose" type="button" aria-label="Dismiss message">×</button></div>
+      <div id="message" class="message" hidden></div>
+    </section>
+    <footer class="statusbar"><span id="statusText">Ready</span><span class="status-right"><span class="made-by">Made by Roy</span><span class="status-dot"></span> Browse2Browse</span></footer>
+    <aside class="settings-panel" id="settingsPanel" aria-label="Settings" hidden>
+      <div class="settings-head"><div><div class="eyebrow">PREFERENCES</div><h2>Settings</h2></div><button class="icon-button" id="closeSettings" aria-label="Close settings">×</button></div>
+      <label class="setting-row"><span><strong>Search engine</strong><small>Used when you search from the address bar</small></span><select id="engine"><option value="duckduckgo">DuckDuckGo</option><option value="google">Google</option><option value="bing">Bing</option><option value="brave">Brave Search</option><option value="yahoo">Yahoo</option></select></label>
+      <label class="setting-row"><span><strong>Homepage</strong><small>Where the home button takes you</small></span><input id="homepage" type="url" placeholder="https://example.com"></label>
+      <label class="setting-row"><span><strong>Appearance</strong><small>Choose how Browse2Browse looks</small></span><select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+      <label class="setting-row"><span><strong>Layout</strong><small>Adjust browser control spacing</small></span><select id="layout"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
+      <label class="setting-row"><span><strong>Animations</strong><small>Subtle transitions and loading effects</small></span><input id="animations" type="checkbox" class="toggle"></label>
+      <div class="shortcut-block"><strong>Keyboard shortcuts</strong><p><kbd>Ctrl</kbd> <kbd>T</kbd> New tab <span><kbd>Ctrl</kbd> <kbd>W</kbd> Close tab</span></p><p><kbd>Ctrl</kbd> <kbd>L</kbd> Focus address <span><kbd>Ctrl</kbd> <kbd>R</kbd> Reload</span></p><p><kbd>Ctrl</kbd> <kbd>Tab</kbd> Next tab <span><kbd>Esc</kbd> Close settings</span></p></div>
+      <button class="text-button danger" id="clearData">Clear browsing and session data</button>
+    </aside>
+  </main>
+  <script src="./app.js" defer></script>
+</body>
+</html>
+
