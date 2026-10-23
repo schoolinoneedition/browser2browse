@@ -31,6 +31,11 @@ jobs:
         run: |
           node --check app.js
           node --check backend/src/server.js
+          node --check cloudflare/src/index.js
+          node -e "JSON.parse(require('node:fs').readFileSync('cloudflare/wrangler.jsonc', 'utf8'))"
+      - name: Validate Cloudflare Worker bundle
+        run: npx --yes wrangler@4.152.0 deploy --dry-run
+        working-directory: cloudflare
       - name: Build static frontend artifact
         run: |
           mkdir _site
