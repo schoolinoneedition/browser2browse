@@ -1,42 +1,34 @@
 # Browse2Browse
 
-Browse2Browse is a browser interface backed by an isolated remote Chromium session. The destination page executes in Chromium on the backend. A continuous Chrome DevTools Protocol screencast is sent over an authenticated WebSocket, and mouse, keyboard, scroll and resize events are sent back to that same remote tab. The app does not embed destination pages in iframes.
+Browse2Browse is an interactive cloud browser. Chromium runs remotely; the app receives a continuous CDP screencast and sends mouse, keyboard, scroll, and resize input back to the remote page. Destination pages are not loaded in local iframes.
 
-## Current deployment state
+## Deployment
 
-The GitHub Pages frontend is deployed at <https://schoolinoneedition.github.io/browser2browse/>. GitHub Pages cannot run persistent Chromium, so the frontend intentionally reports that the remote browser service is not configured until a container host is connected. Set the backend HTTPS origin in `config.js`, then push to `main` to deploy the connected frontend. The backend is in `backend/` and is ready to build as a Docker container.
+The static frontend is deployed at <https://schoolinoneedition.github.io/browser2browse/>. The Cloudflare Browser Run backend lives in `cloudflare/` and requires a Cloudflare Worker with its Browser Run binding and SQLite-backed Durable Object. The configuration is in `cloudflare/wrangler.jsonc`.
 
-No container hosting account or deployment credentials were available in this task. Therefore a live cloud-browser session has not been deployed or verified yet. Do not publish the backend as an unrestricted public service before configuring its allowed frontend origin and network egress rules.
+To connect the Worker to GitHub, create a Worker from `schoolinoneedition/browser2browse`, set the root directory to `cloudflare`, and use the repository's Wrangler configuration. The Worker must have the `BROWSER` Browser Run binding and `BROWSER_SESSION` Durable Object binding defined by that config. Set `ALLOWED_ORIGIN` to `https://schoolinoneedition.github.io` (already the default). Once deployed, set `apiBase` in `config.js` to the Worker origin, for example `https://browse2browse-browser.<account-subdomain>.workers.dev`, and push the frontend config to `main`.
 
-## Run the backend locally
+The free Browser Run plan currently includes 10 browser minutes per day and up to three concurrent sessions. Browse2Browse caps its session lifetime at seven minutes and limits session starts per source IP. Free-plan quotas are enforced by Cloudflare; do not upgrade the account to deploy this project. See [Cloudflare Browser Run pricing](https://developers.cloudflare.com/browser-run/pricing/).
 
-Requires Node.js 22+ and the matching Playwright Chromium image (Docker is the supported local setup):
+## Local Docker backend
+
+The Node.js/Playwright backend in `backend/` remains available when running a Docker host with Chromium. It speaks the same frontend API and WebSocket protocol.
 
 ```sh
 cd backend
 docker build -t browse2browse-backend .
-docker run --rm -p 8080:8080 \
-  -e ALLOWED_ORIGINS=http://localhost:5173 \
-  browse2browse-backend
+docker run --rm -p 8080:8080 -e ALLOWED_ORIGINS=http://localhost:5173 browse2browse-backend
 ```
 
-Serve the frontend at `http://localhost:5173` with any static server. Set `window.B2B_CONFIG.apiBase` in `config.js` to `http://localhost:8080`. Check `http://localhost:8080/healthz` for backend process status. The health check does not claim that a user navigation has succeeded.
+Serve the frontend on `http://localhost:5173` and set `apiBase` in `config.js` to `http://localhost:8080`. Check `/healthz` for process status. A healthy service process does not prove a destination loaded successfully.
 
-## Deploy
+## Security and limits
 
-1. Deploy `backend/` to a container host that supports long-lived Node processes, WebSockets, outbound DNS/HTTPS, and Playwright's documented Linux browser dependencies. Use `backend/Dockerfile`.
-2. Configure `ALLOWED_ORIGINS=https://schoolinoneedition.github.io` and a suitable `MAX_SESSIONS`. Keep sessions short-lived. Apply a host-level egress firewall that blocks private, loopback, link-local, and metadata networks; application DNS checks are defense in depth and cannot replace network isolation against DNS rebinding or infrastructure changes.
-3. Configure TLS/WSS and a stable HTTPS service URL at the host. Do not expose a Chromium debugging port.
-4. Set `apiBase` in `config.js` to that backend origin, without a path suffix, e.g. `https://your-service.example.com`.
-5. Push changes to `main`; `.github/workflows/pages.yml` deploys the static frontend. Verify the frontend's connection state and the backend `/healthz` endpoint.
+Sessions are short-lived and isolated. The Cloudflare worker checks HTTP(S) destinations, blocks private and local IP ranges using DNS resolution for browser requests, applies Browser Run hostname guardrails, limits request sizes and free session creation per IP, and keeps session credentials out of URLs and persistent browser storage. Use the service only for websites you are authorized to access. Some destinations may fail due to their own restrictions, browser capabilities, or the free browser-time quota.
 
-The backend accepts only configured browser origins, uses short-lived random bearer capabilities held in frontend memory, separates browser contexts per session, rate-limits requests, caps body sizes and session count, and validates each HTTP(S) request and redirect against DNS results and non-public IP ranges. Service workers are disabled so request policy applies. WebSocket requests are validated as well. A real provider should additionally enforce egress restrictions at the network layer. There is no account system; closing the browser loses the temporary session token, and idle sessions expire after 20 minutes by default. Cookies and website storage are isolated in the remote context and cleared when it expires.
-
-## Transport and limitations
-
-This first implementation uses Chromium CDP's continuous JPEG screencast frames and an authenticated WebSocket for reverse input because GitHub Pages is static and cannot terminate a WebRTC media session itself. It is interactive remote rendering, not a thumbnail or iframe. A production deployment should measure latency and bandwidth and may later move the media path to WebRTC. DRM, specialized hardware, browser extensions, downloads and some permission flows are not supported. Use the service only for destinations you are authorized to access.
+Closing a tab or clearing browsing data removes its remote session. Cookies and site storage are temporary and are cleared when the cloud browser session expires. Downloads and some pop-up, media, DRM, extension, and permission flows are not supported.
 
 ## GitHub Pages
 
-The Pages workflow publishes the repository root. In repository Settings → Pages, set **Source** to **GitHub Actions**. The workflow runs on pushes to `main` and can be run manually from Actions.
+The Pages workflow publishes the static files from the repository root on pushes to `main`. In repository Settings → Pages, choose **GitHub Actions** as the source. The `apiBase` setting must point at the deployed backend; GitHub Pages cannot run Chromium itself.
 
