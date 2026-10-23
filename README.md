@@ -4,9 +4,9 @@ Browse2Browse is an interactive cloud browser. Chromium runs remotely; the app r
 
 ## Deployment
 
-The static frontend is deployed at <https://schoolinoneedition.github.io/browser2browse/>. The Cloudflare Browser Run backend lives in `cloudflare/` and requires a Cloudflare Worker with its Browser Run binding and SQLite-backed Durable Object. The configuration is in `cloudflare/wrangler.jsonc`.
+The static frontend is deployed at <https://schoolinoneedition.github.io/browser2browse/>. Its live Cloudflare Browser Run backend is <https://browse2browse-cloud-browser.plsgivemediscord981.workers.dev>. The Worker source, Browser Run binding, SQLite-backed Durable Object, and allowed frontend origin are defined in `cloudflare/`.
 
-To connect the Worker to GitHub, create a Worker from `schoolinoneedition/browser2browse`, set the root directory to `cloudflare`, and use the repository's Wrangler configuration. The Worker must have the `BROWSER` Browser Run binding and `BROWSER_SESSION` Durable Object binding defined by that config. Set `ALLOWED_ORIGIN` to `https://schoolinoneedition.github.io` (already the default). Once deployed, set `apiBase` in `config.js` to the Worker origin, for example `https://browse2browse-browser.<account-subdomain>.workers.dev`, and push the frontend config to `main`.
+For future backend changes, use Wrangler from `cloudflare/` (`npx wrangler deploy`) with an account-scoped `Workers Scripts: Edit` token. The Worker name is `browse2browse-cloud-browser`; `config.js` already points to its production URL. GitHub Pages publishes the updated frontend automatically when `main` changes.
 
 The free Browser Run plan currently includes 10 browser minutes per day and up to three concurrent sessions. Browse2Browse caps its session lifetime at seven minutes and limits session starts per source IP. Free-plan quotas are enforced by Cloudflare; do not upgrade the account to deploy this project. See [Cloudflare Browser Run pricing](https://developers.cloudflare.com/browser-run/pricing/).
 
