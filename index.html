@@ -10,7 +10,7 @@
   <meta property="og:type" content="website">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./styles.css?v=4">
+  <link rel="stylesheet" href="./styles.css?v=5">
   <title>Browse2Browse — Browse the web inside your browser</title>
 </head>
 <body>
@@ -32,6 +32,7 @@
         <input id="address" type="text" autocomplete="off" spellcheck="false" aria-label="Search or enter website address" placeholder="Search or enter address">
         <button class="clear-address" id="clearAddress" type="button" aria-label="Clear address" hidden>×</button>
       </form>
+      <button class="icon-button" id="bookmark" aria-label="Bookmark current page" title="Bookmark current page" aria-pressed="false" disabled>☆</button>
       <button class="icon-button settings-trigger" id="settingsToggle" aria-label="Open settings" title="Settings">⚙</button>
       <button class="icon-button fullscreen-trigger" id="fullscreen" aria-label="Enter fullscreen" title="Fullscreen">⛶</button>
     </nav>
@@ -49,12 +50,27 @@
       <label class="setting-row"><span><strong>Appearance</strong><small>Choose how Browse2Browse looks</small></span><select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
       <label class="setting-row"><span><strong>Layout</strong><small>Adjust browser control spacing</small></span><select id="layout"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
       <label class="setting-row"><span><strong>Animations</strong><small>Subtle transitions and loading effects</small></span><input id="animations" type="checkbox" class="toggle"></label>
+      <section class="bookmarks-block" aria-labelledby="bookmarksHeading">
+        <div class="block-heading"><strong id="bookmarksHeading">Bookmarks</strong><small>Saved locally and synced when connected</small></div>
+        <div id="bookmarksList" class="bookmarks-list"></div>
+      </section>
+      <section class="sync-block" aria-labelledby="syncHeading">
+        <div class="block-heading"><strong id="syncHeading">Cloud sync</strong><small>Keep preferences, bookmarks and recent sites on your account</small></div>
+        <p id="syncStatus" class="sync-status">Local-only mode. Supabase sync has not been configured yet.</p>
+        <label class="sync-email-label" for="syncEmail">Email address</label>
+        <input id="syncEmail" type="email" autocomplete="email" placeholder="you@example.com">
+        <div class="sync-actions">
+          <button id="syncSignIn" class="primary-button" type="button" disabled>Send sign-in link</button>
+          <button id="syncSignOut" class="secondary-button" type="button" hidden>Sign out</button>
+        </div>
+      </section>
       <div class="shortcut-block"><strong>Keyboard shortcuts</strong><p><kbd>Ctrl</kbd> <kbd>T</kbd> New tab <span><kbd>Ctrl</kbd> <kbd>W</kbd> Close tab</span></p><p><kbd>Ctrl</kbd> <kbd>L</kbd> Focus address <span><kbd>Ctrl</kbd> <kbd>R</kbd> Reload</span></p><p><kbd>Ctrl</kbd> <kbd>Tab</kbd> Next tab <span><kbd>Esc</kbd> Close settings</span></p></div>
       <button class="text-button danger" id="clearData">Clear browsing and session data</button>
     </aside>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0" defer></script>
   <script src="./config.js"></script>
-  <script src="./app.js?v=4" defer></script>
+  <script src="./app.js?v=5" defer></script>
 </body>
 </html>
 

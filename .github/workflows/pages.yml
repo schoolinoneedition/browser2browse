@@ -30,6 +30,7 @@ jobs:
       - name: Validate JavaScript syntax
         run: |
           node --check app.js
+          node --check config.js
           node --check backend/src/server.js
           node --check cloudflare/src/index.js
           node -e "JSON.parse(require('node:fs').readFileSync('cloudflare/wrangler.jsonc', 'utf8'))"
