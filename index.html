@@ -10,7 +10,7 @@
   <meta property="og:type" content="website">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./styles.css?v=3">
+  <link rel="stylesheet" href="./styles.css?v=4">
   <title>Browse2Browse — Browse the web inside your browser</title>
 </head>
 <body>
@@ -38,8 +38,7 @@
     <div class="progress-track" aria-hidden="true"><div id="progress"></div></div>
     <section id="viewport" class="viewport" aria-live="polite">
       <div id="newtab" class="newtab"></div>
-      <iframe id="pageFrame" title="Embedded website" sandbox="allow-forms allow-scripts allow-popups allow-popups-to-escape-sandbox allow-downloads" allow="fullscreen; clipboard-read; clipboard-write" hidden></iframe>
-      <div id="frameHint" class="frame-hint" hidden role="status"><span><strong>Page blank?</strong> Some sites block embedded browsing.</span><button id="hintCopy" type="button">Copy address</button><a id="hintOpen" target="_blank" rel="noopener noreferrer">Open in browser ↗</a><button id="hintClose" type="button" aria-label="Dismiss message">×</button></div>
+      <img id="remoteView" alt="Live view of the remote browser. Click, type, or scroll to interact." draggable="false" hidden>
       <div id="message" class="message" hidden></div>
     </section>
     <footer class="statusbar"><span id="statusText">Ready</span><span class="status-right"><span class="made-by">Made by Roy</span><span class="status-dot"></span> Browse2Browse</span></footer>
@@ -54,7 +53,8 @@
       <button class="text-button danger" id="clearData">Clear browsing and session data</button>
     </aside>
   </main>
-  <script src="./app.js" defer></script>
+  <script src="./config.js"></script>
+  <script src="./app.js?v=4" defer></script>
 </body>
 </html>
 
