@@ -405,7 +405,7 @@ export class BrowserSession extends DurableObject {
         if (message.type === 'activate') { await this.activate(tab.id); return; }
         if (message.type === 'input') {
           const xy = { x: Math.max(0, Number(message.x) || 0), y: Math.max(0, Number(message.y) || 0) };
-          if (message.event === 'wheel') await this.pageCommand(tab, 'Input.dispatchMouseEvent', { type: 'mouseWheel', x: 20, y: 20, deltaX: Number(message.deltaX) || 0, deltaY: Number(message.deltaY) || 0 });
+          if (message.event === 'wheel') await this.pageCommand(tab, 'Input.dispatchMouseEvent', { type: 'mouseWheel', ...xy, deltaX: Number(message.deltaX) || 0, deltaY: Number(message.deltaY) || 0 });
           else if (['mouseMoved', 'mousePressed', 'mouseReleased'].includes(message.event)) await this.pageCommand(tab, 'Input.dispatchMouseEvent', { type: message.event, ...xy, button: message.button === 2 ? 'right' : message.button === 1 ? 'middle' : 'left', clickCount: 1 });
         } else if (message.type === 'key') {
           const m = message.modifiers || {}, modifiers = (m.alt ? 1 : 0) | (m.ctrl ? 2 : 0) | (m.meta ? 4 : 0) | (m.shift ? 8 : 0);
