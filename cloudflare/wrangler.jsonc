@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "name": "browse2browse-browser",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-23",
+  "browser": { "binding": "BROWSER" },
+  "durable_objects": {
+    "bindings": [
+      { "name": "BROWSER_SESSION", "class_name": "BrowserSession" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["BrowserSession"] }
+  ],
+  "vars": {
+    "ALLOWED_ORIGIN": "https://schoolinoneedition.github.io"
+  }
+}
+
