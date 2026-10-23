@@ -21,4 +21,8 @@
 .frame-hint a,.frame-hint button{font:inherit;font-size:10px;font-weight:600}.recent-sites .site-shortcut:nth-child(1){--site-index:0}.recent-sites .site-shortcut:nth-child(2){--site-index:1}.recent-sites .site-shortcut:nth-child(3){--site-index:2}.recent-sites .site-shortcut:nth-child(4){--site-index:3}.recent-sites .site-shortcut:nth-child(5){--site-index:4}.recent-sites .site-shortcut:nth-child(6){--site-index:5}
 .dark{color:var(--ink)}.brand-name{color:#242832}.dark .brand-name{color:#e5e7ec}.welcome-search input{background:transparent}
 .newtab[hidden],.message[hidden]{display:none!important}
+#remoteView{display:block;width:100%;height:100%;object-fit:contain;background:#fff;outline:0;cursor:default;user-select:none;-webkit-user-drag:none;animation:fade-in .18s ease both}
+#remoteView[hidden]{display:none}
+.status-dot{animation:status-breathe 2s ease-in-out infinite}
+@keyframes status-breathe{0%,100%{opacity:.55;transform:scale(.9)}50%{opacity:1;transform:scale(1.18)}}
 
